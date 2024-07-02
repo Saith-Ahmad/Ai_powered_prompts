@@ -12,7 +12,7 @@ export const GET = async (request, {params}) => {
     const prompts = await Prompt.findById(params.id);
     console.log(prompts)
     if(!prompts){
-        return new Response("Prompt Not Found", {status : 404})
+        return new Response("Prompt Not Found")
     }
     // const populatedPrompts = await Promise.all(prompts.map(async (prompt) => {
     //   const user = await User.findById(prompt.creator);
@@ -22,7 +22,15 @@ export const GET = async (request, {params}) => {
     //   };
     // }));
 
-    return new Response(JSON.stringify(prompts), { status: 200 });
+    return new Response(JSON.stringify(prompts), {
+      status: 200,
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+        'Surrogate-Control': 'no-store',
+      },
+    });
   } catch (error) {
     return new Response(`Failed to fetch prompt`, { status: 501 });
   }

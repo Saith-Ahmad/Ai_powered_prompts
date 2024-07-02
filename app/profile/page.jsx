@@ -15,7 +15,14 @@ const ProfilePage = () => {
       if (!session?.user.id) return;
 
       try {
-        const response = await fetch(`/api/users/${session?.user.id}/posts`);
+        const response = await fetch(`/api/users/${session?.user.id}/posts`, {
+          method: 'GET',
+          headers: {
+            'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+            'Pragma': 'no-cache',
+            'Expires': '0',
+          },
+        });
         const data = await response.json();
         setPosts(data);
       } catch (error) {

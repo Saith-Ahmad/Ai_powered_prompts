@@ -1,10 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-
 import PromptCard from "./PromptCard";
 
 const PromptCardList = ({ data, handleTagClick }) => {
+  //https://ai-powered-prompts-phi.vercel.app/
   return (
     <div className='mt-16 prompt_layout'>
       {data.map((post) => (
@@ -23,17 +23,27 @@ const Feed = () => {
 
   // Search states
   const [searchText, setSearchText] = useState("");
+  const [time, setTime] = useState("");
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [searchedResults, setSearchedResults] = useState([]);
 
   const fetchPosts = async () => {
-    const response = await fetch("/api/prompt");
+    const response = await fetch("/api/prompt/all/1",{
+      next : {revalidate : 2}
+    })
     const data = await response.json();
-    console.log(data)
 
     setAllPosts(data);
   };
-
+  // const getTime = async() => {
+  //   const req =await fetch("https://worldtimeapi.org/api/timezone/america/chicago", {
+  //     cache : 'no-store'
+  //   })
+  //   const tim = await req.json();
+  //   // console.log(tim.utc_datetime)
+  // setTime(tim.utc_datetime);
+  // }
+  
   useEffect(() => {
     fetchPosts();
   }, []);
@@ -95,3 +105,4 @@ const Feed = () => {
 };
 
 export default Feed;
+
